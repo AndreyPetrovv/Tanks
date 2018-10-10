@@ -1,0 +1,15 @@
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\Tanks.csprojAssemblyReference.cache
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\MainWindow.g.cs
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\App.g.cs
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\Tanks_MarkupCompile.cache
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\Tanks_MarkupCompile.lref
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\bin\Debug\Tanks.exe.config
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\bin\Debug\Tanks.exe
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\bin\Debug\Tanks.pdb
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\MainWindow.baml
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\Tanks.g.resources
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\Tanks.Properties.Resources.resources
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\Tanks.csproj.GenerateResource.cache
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\Tanks.csproj.CoreCompileInputs.cache
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\Tanks.exe
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\Tanks.pdb
