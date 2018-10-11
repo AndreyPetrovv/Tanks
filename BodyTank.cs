@@ -45,10 +45,5 @@ namespace Tanks
             return rectangle;
         }
 
-        public override void Move()
-        {
-            base.Move();
-        }
-
     }
 }

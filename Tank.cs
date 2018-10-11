@@ -72,8 +72,18 @@ namespace Tanks
 
         public virtual void drawing() { }
 
-        public virtual void Move() { }
+        public void Move(int x, int y) {
+            PositionToX += x;
+            PositionToY += y;
+            tankBo.drawing();
+            tankBa.drawing();
+        }
 
+        public void barrelRotation(int x, int y) {
+            tankBa.DirectionRelativeToX = x;
+            tankBa.DirectionRelativeToY = y;
+            tankBa.drawing();
+        }
         public virtual void Shot() { }
 
     }
