@@ -6,12 +6,16 @@ using System.Windows;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
-namespace Tanks 
+
+namespace Tanks
 {
-    public class Tank 
+    public class Tank
     {
-
+        Bullet bullet;
+        Image image;
         private string _name;
         private int _positionToX;
         private int _positionToY;
@@ -38,53 +42,67 @@ namespace Tanks
             }
         }
 
-        private string Name {
+        private string Name
+        {
             get
             {
                 return _name;
             }
-            set {
+            set
+            {
                 _name = value;
             }
         }
 
-        BodyTank tankBo ;
-        Tank_barrel tankBa ;
-
-        public Tank(string name, int x, int y) {
+        public Tank(string name, int x, int y)
+        {
             PositionToX = x;
             PositionToY = y;
             _name = name;
-            tankBo = new BodyTank(x,y);
-            tankBa = new Tank_barrel(x, y);
-           
-        }
-        public Tank() { }
-
-        public Rectangle drawingTankBo() {
-            
-            return tankBo.GetBody();
-        }
-        public Line drawingTankBa() {
-            
-            return tankBa.GetBarrel();
         }
 
-        public virtual void drawing() { }
+        public void Drawing()
+        {
+            image = new Image();
+            image.Width = 60;
+            image.Height = 60;
+            var uri = new Uri("pack://application:,,,/ImageTank/танк.png");
+            var bitmap = new BitmapImage(uri);
+            image.Source = bitmap;
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window.GetType() == typeof(MainWindow))
+                {
+                    (window as MainWindow).canvas.Children.Add(image);
+                }
+            }
 
-        public void Move(int x, int y) {
+        }
+        public Image GetImage()
+        {
+            return image;
+        }
+        public void Move(int x, int y, Uri uri)
+        {
             PositionToX += x;
             PositionToY += y;
-            tankBo.drawing();
-            tankBa.drawing();
+
+            var bitmap = new BitmapImage(uri);
+            image.Source = bitmap;
+        }
+        public void Shot()
+        {
+            bullet = new Bullet(PositionToX, PositionToY);
+        }
+        public Image FlightShot()
+        {
+            bullet.flight(0, -1);
+            return bullet.getImage();
         }
 
-        public void barrelRotation(int x, int y) {
-            tankBa.DirectionRelativeToX = x;
-            tankBa.DirectionRelativeToY = y;
-            tankBa.drawing();
+        public Bullet GetBulll()
+        {
+            return bullet;
         }
-        public virtual void Shot() { }
-
     }
 }

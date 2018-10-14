@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace Tanks
 {
@@ -21,80 +23,79 @@ namespace Tanks
     public partial class MainWindow : Window
     {
 
-        Tank tankOne;
+        static Tank tank;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            FirsInitializanion();
         }
 
-        private void addCanvas() {
-            canvas.Children.Add(tankOne.drawingTankBo());
-            canvas.Children.Add(tankOne.drawingTankBa());
-            Canvas.SetLeft(tankOne.drawingTankBo(), tankOne.PositionToX);
-            Canvas.SetTop(tankOne.drawingTankBo(), tankOne.PositionToY);
-            Canvas.SetLeft(tankOne.drawingTankBa(), tankOne.PositionToX);
-            Canvas.SetTop(tankOne.drawingTankBa(), tankOne.PositionToY);
+        private void FirsInitializanion()
+        {
+            tank = new Tank("1", 250, 250);
+            tank.Drawing();
+            AddCanvas(tank.GetImage());
+        }
+
+        private void AddCanvas(Image image)
+        {
+            Canvas.SetLeft(image, tank.PositionToX);
+            Canvas.SetTop(image, tank.PositionToY);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Random r = new Random();
-            tankOne = new Tank("1", 250, 250);
-            addCanvas();
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.Key) {
+
+            switch (e.Key)
+            {
                 case Key.W:
-                    canvas.Children.Remove(tankOne.drawingTankBo());
-                    canvas.Children.Remove(tankOne.drawingTankBa());
-                    tankOne.Move(0,-3);
-                    addCanvas();
+                    tank.Move(0, -2, new Uri("pack://application:,,,/ImageTank/танк.png"));
                     break;
                 case Key.S:
-                    canvas.Children.Remove(tankOne.drawingTankBo());
-                    canvas.Children.Remove(tankOne.drawingTankBa());
-                    tankOne.Move(0, 3);
-                    addCanvas();
+                    tank.Move(0, 2, new Uri("pack://application:,,,/ImageTank/танкD.png"));
                     break;
                 case Key.A:
-                    canvas.Children.Remove(tankOne.drawingTankBo());
-                    canvas.Children.Remove(tankOne.drawingTankBa());
-                    tankOne.Move(-3, 0);
-                    addCanvas();
+                    tank.Move(-2, 0, new Uri("pack://application:,,,/ImageTank/танкL.png"));
                     break;
                 case Key.D:
-                    canvas.Children.Remove(tankOne.drawingTankBo());
-                    canvas.Children.Remove(tankOne.drawingTankBa());
-                    tankOne.Move(3, 0);
-                    addCanvas();
+                    tank.Move(2, 0, new Uri("pack://application:,,,/ImageTank/танкR.png"));
                     break;
-                case Key.Left:
-                    canvas.Children.Remove(tankOne.drawingTankBo());
-                    canvas.Children.Remove(tankOne.drawingTankBa());
-                    tankOne.barrelRotation(-1,0);
-                    addCanvas();
-                    break;
-                case Key.Right:
-                    canvas.Children.Remove(tankOne.drawingTankBa());
-                    canvas.Children.Remove(tankOne.drawingTankBo());
-                    tankOne.barrelRotation(1, 0);
-                    addCanvas();
-                    break;
-                case Key.Up:
-                    canvas.Children.Remove(tankOne.drawingTankBa());
-                    canvas.Children.Remove(tankOne.drawingTankBo());
-                    tankOne.barrelRotation(0, -1);
-                    addCanvas();
-                    break;
-                case Key.Down:
-                    canvas.Children.Remove(tankOne.drawingTankBa());
-                    canvas.Children.Remove(tankOne.drawingTankBo());
-                    tankOne.barrelRotation(0, 1);
-                    addCanvas();
+                case Key.Space:
+                    tank.Shot();
+                    canvas.Children.Add(tank.FlightShot());
+
+                    Thread thread = new Thread(TankShot);
+                    thread.SetApartmentState(ApartmentState.STA);
+                    DateTime date1 = new DateTime();
+                    thread.Name = "Поток" + date1;
+                    thread.Start();
                     break;
             }
+            AddCanvas(tank.GetImage());
         }
+
+        public void TankShot()
+        {
+            //tank.Shot();
+
+            for (int i = 0; i < 30; i++)
+            {
+                
+                Thread.Sleep(100);
+                canvas.Dispatcher.Invoke(new ThreadStart(delegate { Canvas.SetLeft(tank.FlightShot(), tank.GetBulll().BulletPositionToX); }));
+                canvas.Dispatcher.Invoke(new ThreadStart(delegate { Canvas.SetTop(tank.FlightShot(), tank.GetBulll().BulletPositionToY); }));
+                //Dispatcher.CurrentDispatcher.Invoke(new ThreadStart(delegate { Canvas.SetLeft(tank.FlightShot(), tank.GetBulll().BulletPositionToX); }));
+                //Dispatcher.CurrentDispatcher.Invoke(new ThreadStart(delegate { Canvas.SetLeft(tank.FlightShot(), tank.GetBulll().BulletPositionToY); }));
+                //Canvas.SetLeft(tank.FlightShot(), tank.GetBulll().BulletPositionToX);
+                //Canvas.SetTop(tank.FlightShot(), tank.GetBulll().BulletPositionToY);
+            }
+        }
+
     }
 }

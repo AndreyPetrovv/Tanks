@@ -55,7 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Tank barrel.cs" />
+    <Compile Include="Bullet.cs" />
     <Compile Include="Tank.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -65,7 +65,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BodyTank.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -96,6 +95,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageTank\танк.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageTank\танкD.png" />
+    <Resource Include="ImageTank\танкL.png" />
+    <Resource Include="ImageTank\танкR.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageTank\Bullet.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
