@@ -107,5 +107,11 @@
   <ItemGroup>
     <Resource Include="ImageTank\Bullet.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageTank\Eтанк.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageTank\Dead.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

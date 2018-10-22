@@ -15,6 +15,7 @@ namespace Tanks
     public class Bullet 
     {
         Image image;
+        private string _orient;
         private int _bulletPositionToX;
         private int _bulletPositionToY;
         public int BulletPositionToX
@@ -39,10 +40,41 @@ namespace Tanks
                 _bulletPositionToY = value;
             }
         }
+        public string Orient
+        {
+            get
+            {
+                return _orient;
+            }
+            set
+            {
+                _orient = value;
+            }
+        }
 
-        public Bullet(int positionToX,int positionToY) {
-            BulletPositionToX = positionToX;
+        public Bullet(int positionToX,int positionToY,string orient) {
+            BulletPositionToX = positionToX + 25;
             BulletPositionToY = positionToY;
+            Orient = orient;
+            switch (Orient)
+            {
+                case "Up":
+                    BulletPositionToX = positionToX + 25;
+                    BulletPositionToY = positionToY;
+                    break;
+                case "Down":
+                    BulletPositionToX = positionToX + 25;
+                    BulletPositionToY = positionToY + 62; 
+                    break;
+                case "Left":
+                    BulletPositionToX = positionToX;
+                    BulletPositionToY = positionToY + 25;
+                    break;
+                case "Right":
+                    BulletPositionToX = positionToX +58 ;
+                    BulletPositionToY = positionToY + 25;
+                    break;
+            }
             drawing();
         }
 
@@ -54,25 +86,38 @@ namespace Tanks
             var uri = new Uri("pack://application:,,,/ImageTank/Bullet.png");
             var bitmap = new BitmapImage(uri);
             image.Source = bitmap;
-
-            //foreach (Window window in Application.Current.Windows)
-            //{
-            //    if (window.GetType() == typeof(MainWindow))
-            //    {
-                    
-                    
-            //        (window as MainWindow).canvas.Children.Add(image);
-            //    }
-            //}
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window.GetType() == typeof(MainWindow))
+                {
+                    (window as MainWindow).canvas.Children.Add(image);
+                }
+            }
         }
-        public Image getImage()
+
+        public Image GetImage()
         {
             return image;
         }
 
-        public void flight(int x, int y) {
-            BulletPositionToX += x;
-            BulletPositionToY += y;
+        public void flight() {
+
+            switch (Orient)
+            {
+                case "Up":
+                    BulletPositionToY -= 5;
+                    break;
+                case "Down":
+                    BulletPositionToY += 5;
+                    break;
+                case "Left":
+                    BulletPositionToX -= 5;
+                    break;
+                case "Right":
+                    BulletPositionToX += 5;
+                    break;
+            }
+
         }
     }
 }

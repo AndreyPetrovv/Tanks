@@ -8,17 +8,33 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
+using System.Threading;
 
 
 namespace Tanks
 {
     public class Tank
     {
-        Bullet bullet;
         Image image;
+        
+        private string _orient="Up";
         private string _name;
+        private int _health;
         private int _positionToX;
         private int _positionToY;
+
+        public int Health
+        {
+            get
+            {
+                return _health;
+            }
+            set
+            {
+                _health = value;
+            }
+        }
         public int PositionToX
         {
             get
@@ -41,7 +57,17 @@ namespace Tanks
                 _positionToY = value;
             }
         }
-
+        public string Orient
+        {
+            get
+            {
+                return _orient;
+            }
+            set
+            {
+                _orient = value;
+            }
+        }
         private string Name
         {
             get
@@ -54,19 +80,35 @@ namespace Tanks
             }
         }
 
-        public Tank(string name, int x, int y)
+        public Tank(string name, int x, int y, string tankOr)
         {
-            PositionToX = x;
-            PositionToY = y;
+            Health = 3;
+            PositionToX = x + 31;
+            PositionToY = y + 29;
             _name = name;
+            Drawing(tankOr);
         }
-
-        public void Drawing()
+        public void Damage()
+        {
+            Health--;
+            if (Health == 0)
+            {
+                MessageBox.Show("Вы его убили!");
+                //DeadTank();
+            }
+        }
+        private void DeadTank()
+        {
+            var uri = new Uri("pack://application:,,,/ImageTank/Dead.png");
+            var bitmap = new BitmapImage(uri);
+            image.Source = bitmap;
+        }
+        public void Drawing(string tankOr)
         {
             image = new Image();
             image.Width = 60;
             image.Height = 60;
-            var uri = new Uri("pack://application:,,,/ImageTank/танк.png");
+            var uri = new Uri("pack://application:,,,/ImageTank/"+tankOr+".png");
             var bitmap = new BitmapImage(uri);
             image.Source = bitmap;
             foreach (Window window in Application.Current.Windows)
@@ -82,27 +124,17 @@ namespace Tanks
         {
             return image;
         }
-        public void Move(int x, int y, Uri uri)
+        public void Move(string orient,int x, int y, Uri uri)
         {
             PositionToX += x;
             PositionToY += y;
-
+            Orient = orient;
             var bitmap = new BitmapImage(uri);
             image.Source = bitmap;
         }
-        public void Shot()
+        public void Shot(ref List<Bullet> windowBullet)
         {
-            bullet = new Bullet(PositionToX, PositionToY);
-        }
-        public Image FlightShot()
-        {
-            bullet.flight(0, -1);
-            return bullet.getImage();
-        }
-
-        public Bullet GetBulll()
-        {
-            return bullet;
+            windowBullet.Add(new Bullet(PositionToX, PositionToY,Orient));
         }
     }
 }
