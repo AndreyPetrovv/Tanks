@@ -82,7 +82,7 @@ namespace Tanks
         {
             image = new Image();
             image.Width = 9;
-            image.Height = 5;
+            image.Height = 9;
             var uri = new Uri("pack://application:,,,/ImageTank/Bullet.png");
             var bitmap = new BitmapImage(uri);
             image.Source = bitmap;
@@ -101,20 +101,20 @@ namespace Tanks
         }
 
         public void flight() {
-
+            int i = 3;
             switch (Orient)
             {
                 case "Up":
-                    BulletPositionToY -= 5;
+                    BulletPositionToY -= i;
                     break;
                 case "Down":
-                    BulletPositionToY += 5;
+                    BulletPositionToY += i;
                     break;
                 case "Left":
-                    BulletPositionToX -= 5;
+                    BulletPositionToX -= i;
                     break;
                 case "Right":
-                    BulletPositionToX += 5;
+                    BulletPositionToX += i;
                     break;
             }
 

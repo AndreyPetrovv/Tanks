@@ -6,17 +6,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tanks"
         mc:Ignorable="d"
-        PreviewKeyDown="Window_KeyDown"
+        KeyDown="Window_KeyDown"
         Title="MainWindow" Height="450" Width="800">
     <Grid x:Name="field">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="11*"/>
         </Grid.RowDefinitions>
-        <Button Content="Добавить танк" HorizontalAlignment="Left" Margin="50,10,0,0" VerticalAlignment="Top" Width="115" Click="Button_Click"/>
+        <Button x:Name="addTank" Content="Добавить танк"  HorizontalAlignment="Left" Margin="50,10,0,0" VerticalAlignment="Top" Width="115" />
         <Canvas x:Name="canvas" x:FieldModifier="public" HorizontalAlignment="Left" Height="365" Margin="10,9.8,0,0" Grid.Row="1" VerticalAlignment="Top" Width="774">
         </Canvas>
-        <TextBlock x:Name="text" x:FieldModifier="public" HorizontalAlignment="Left" Margin="300,10,0,0" TextWrapping="Wrap" Text="Tex" VerticalAlignment="Top" Width="165"/>
+        <TextBlock x:Name="text" x:FieldModifier="public" HorizontalAlignment="Left" Margin="300,10,0,0" TextWrapping="Wrap" Text="Кол-во танков портивника" VerticalAlignment="Top" Width="165"/>
+        <TextBlock x:Name="Num" HorizontalAlignment="Left" Margin="470,10,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

@@ -53,14 +53,18 @@ namespace Tanks
                 Thread.Sleep(1);
                 for (int i = 0; i < windowTank.Count; i++)
                 {
-
-                    Dispatcher.Invoke(() => Canvas.SetLeft(windowTank[i].GetImage(), windowTank[i].PositionToX));
-                    Dispatcher.Invoke(() => Canvas.SetTop(windowTank[i].GetImage(), windowTank[i].PositionToY));
-
+                    try
+                    {
+                        Dispatcher.Invoke(() => Canvas.SetLeft(windowTank[i].GetImage(), windowTank[i].PositionToX));
+                        Dispatcher.Invoke(() => Canvas.SetTop(windowTank[i].GetImage(), windowTank[i].PositionToY));
+                    }
+                    catch { }
                     if (windowTank[i].Health == 0)
                     {
                         Dispatcher.Invoke(() => canvas.Children.Remove(windowTank[i].GetImage()));
-                       // windowTank.Remove(windowTank[i]);
+
+                        windowTank.Remove(windowTank[i]);
+                        Dispatcher.Invoke(() => Num.Text = (Convert.ToInt32(Num.Text) - 1).ToString());
                     }
                 }
 
@@ -79,16 +83,19 @@ namespace Tanks
                     Dispatcher.Invoke(() => Canvas.SetTop(windowBullet[i].GetImage(), windowBullet[i].BulletPositionToY));
                     for (int j = 0; j < windowTank.Count; j++)
                     {
-                        
-                        if ((windowBullet[i].BulletPositionToY > windowTank[j].PositionToY) &&
-                            (windowBullet[i].BulletPositionToY < windowTank[j].PositionToY +62)&& 
-                            ((windowBullet[i].BulletPositionToX > windowTank[j].PositionToX)&& 
-                            (windowBullet[i].BulletPositionToX < windowTank[j].PositionToX + 58)))
+                        try
                         {
-                            windowTank[j].Damage();
-                            Dispatcher.Invoke(() => canvas.Children.Remove(windowBullet[i].GetImage()));
-                            windowBullet.Remove(windowBullet[i]);
+                            if ((windowBullet[i].BulletPositionToY > windowTank[j].PositionToY) &&
+                                (windowBullet[i].BulletPositionToY < windowTank[j].PositionToY + 62) &&
+                                ((windowBullet[i].BulletPositionToX > windowTank[j].PositionToX) &&
+                                (windowBullet[i].BulletPositionToX < windowTank[j].PositionToX + 58)))
+                            {
+                                windowTank[j].Damage();
+                                Dispatcher.Invoke(() => canvas.Children.Remove(windowBullet[i].GetImage()));
+                                windowBullet.Remove(windowBullet[i]);
+                            }
                         }
+                        catch { }
                     }
                     if (i <= windowBullet.Count - 1)
                         if ((windowBullet[i].BulletPositionToY > 450 || windowBullet[i].BulletPositionToY < 0) ||
@@ -113,14 +120,15 @@ namespace Tanks
             Canvas.SetTop(image, tank.PositionToY);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click()
         {
             Random r = new Random();
-            windowTank.Add(new Tank("2", r.Next(200),r.Next(230), "Eтанк"));
+            windowTank.Add(new Tank("2", r.Next(50,600),r.Next(50,340), "Eтанк"));
+            Num.Text = (Convert.ToInt32(Num.Text) + 1 ).ToString();
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
-        {
+         {
 
             switch (e.Key)
             {
@@ -139,6 +147,7 @@ namespace Tanks
                 case Key.Space:
                     tank.Shot(ref windowBullet);
                     break;
+                case Key.Q: Button_Click(); break;
             }
         }
 

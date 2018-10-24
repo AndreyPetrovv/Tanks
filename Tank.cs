@@ -82,7 +82,7 @@ namespace Tanks
 
         public Tank(string name, int x, int y, string tankOr)
         {
-            Health = 3;
+            Health = 1;
             PositionToX = x + 31;
             PositionToY = y + 29;
             _name = name;
@@ -93,7 +93,8 @@ namespace Tanks
             Health--;
             if (Health == 0)
             {
-                MessageBox.Show("Вы его убили!");
+
+                //MessageBox.Show("Вы его убили!");
                 //DeadTank();
             }
         }
