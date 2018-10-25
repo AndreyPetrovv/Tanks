@@ -23,6 +23,8 @@ namespace Tanks
         private int _health;
         private int _positionToX;
         private int _positionToY;
+        private int _previousPositionX;
+        private int _previousPositionY;
 
         public int Health
         {
@@ -57,6 +59,28 @@ namespace Tanks
                 _positionToY = value;
             }
         }
+        public int PreviousPositionToX
+        {
+            get
+            {
+                return _previousPositionX;
+            }
+            set
+            {
+                _previousPositionX = value;
+            }
+        }
+        public int PreviousPositionToY
+        {
+            get
+            {
+                return _previousPositionY;
+            }
+            set
+            {
+                _previousPositionY = value;
+            }
+        }
         public string Orient
         {
             get
@@ -79,12 +103,13 @@ namespace Tanks
                 _name = value;
             }
         }
-
         public Tank(string name, int x, int y, string tankOr)
         {
             Health = 1;
             PositionToX = x + 31;
             PositionToY = y + 29;
+            PreviousPositionToX = PositionToX;
+            PreviousPositionToY = PositionToY;
             _name = name;
             Drawing(tankOr);
         }
@@ -127,6 +152,8 @@ namespace Tanks
         }
         public void Move(string orient,int x, int y, Uri uri)
         {
+            PreviousPositionToX = PositionToX;
+            PreviousPositionToY = PositionToY;
             PositionToX += x;
             PositionToY += y;
             Orient = orient;

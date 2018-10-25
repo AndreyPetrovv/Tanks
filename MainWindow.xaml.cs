@@ -35,7 +35,7 @@ namespace Tanks
 
             FirsInitializanion();
 
-            windowTank.Add(new Tank("2", 200, 50,"Eтанк"));
+            windowTank.Add(new Tank("2", 200, 50, "Eтанк"));
 
             Thread objectMappingTank = new Thread(ThreadMapingTank);
             Thread objectMappingBullet = new Thread(ThreadMapingBullet);
@@ -46,7 +46,6 @@ namespace Tanks
 
         void ThreadMapingTank()
         {
-            //windowTank.Add(new Tank("2", 200, 50, "Eтанк"));
 
             while (true)
             {
@@ -55,8 +54,40 @@ namespace Tanks
                 {
                     try
                     {
-                        Dispatcher.Invoke(() => Canvas.SetLeft(windowTank[i].GetImage(), windowTank[i].PositionToX));
-                        Dispatcher.Invoke(() => Canvas.SetTop(windowTank[i].GetImage(), windowTank[i].PositionToY));
+                        for (int j = 0; j < windowTank.Count; j++)
+                        {
+                            if (windowTank[i] != windowTank[j])
+                            {
+
+                                if (Math.Abs(windowTank[i].PositionToX - windowTank[j].PositionToX) > 58 || Math.Abs(windowTank[i].PositionToY - windowTank[j].PositionToY) > 58)
+                                {
+
+                                    Dispatcher.Invoke(() => Canvas.SetTop(windowTank[i].GetImage(), windowTank[i].PositionToY));
+                                    Dispatcher.Invoke(() => Canvas.SetLeft(windowTank[i].GetImage(), windowTank[i].PositionToX));
+
+                                }
+                                else
+                                {
+                                    windowTank[i].PositionToY = windowTank[i].PreviousPositionToY;
+                                    windowTank[i].PositionToX = windowTank[i].PreviousPositionToX;
+                                }
+                                //if (Math.Abs(windowTank[i].PositionToY - windowTank[j].PositionToY) > 58)
+                                //{
+                                //    Dispatcher.Invoke(() => Canvas.SetTop(windowTank[i].GetImage(), windowTank[i].PositionToX));
+                                //}
+                                //else
+                                //{
+                                //    windowTank[i].PositionToX = windowTank[i].PreviousPositionToX;
+                                //}
+                            }
+                            else {
+                                Dispatcher.Invoke(() => Canvas.SetTop(windowTank[i].GetImage(), windowTank[i].PositionToY));
+                                Dispatcher.Invoke(() => Canvas.SetLeft(windowTank[i].GetImage(), windowTank[i].PositionToX));
+                            }
+                        }
+
+                        //Dispatcher.Invoke(() => Canvas.SetLeft(windowTank[i].GetImage(), windowTank[i].PositionToX));
+                        //Dispatcher.Invoke(() => Canvas.SetTop(windowTank[i].GetImage(), windowTank[i].PositionToY));
                     }
                     catch { }
                     if (windowTank[i].Health == 0)
@@ -85,10 +116,7 @@ namespace Tanks
                     {
                         try
                         {
-                            if ((windowBullet[i].BulletPositionToY > windowTank[j].PositionToY) &&
-                                (windowBullet[i].BulletPositionToY < windowTank[j].PositionToY + 62) &&
-                                ((windowBullet[i].BulletPositionToX > windowTank[j].PositionToX) &&
-                                (windowBullet[i].BulletPositionToX < windowTank[j].PositionToX + 58)))
+                            if (ChargeDestructionCheck(windowTank[j], windowBullet[i]))
                             {
                                 windowTank[j].Damage();
                                 Dispatcher.Invoke(() => canvas.Children.Remove(windowBullet[i].GetImage()));
@@ -106,6 +134,16 @@ namespace Tanks
                         }
                 }
             }
+        }
+
+        private static bool ChargeDestructionCheck(Tank tank, Bullet bullet)
+        {
+            if ((bullet.BulletPositionToY > tank.PositionToY) && (bullet.BulletPositionToY < tank.PositionToY + 62) &&
+                                                                 ((bullet.BulletPositionToX > tank.PositionToX) &&
+                                                                 (bullet.BulletPositionToX < tank.PositionToX + 58)))
+                return true;
+            return false;
+
         }
 
         private void FirsInitializanion()
@@ -129,7 +167,7 @@ namespace Tanks
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
          {
-
+            
             switch (e.Key)
             {
                 case Key.W:
