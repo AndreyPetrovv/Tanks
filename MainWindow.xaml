@@ -6,6 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tanks"
         mc:Ignorable="d"
+        Closing="myWindow_Closing"
         KeyDown="Window_KeyDown"
         Title="MainWindow" Height="450" Width="800">
     <Grid x:Name="field">

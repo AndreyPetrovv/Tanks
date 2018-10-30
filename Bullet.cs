@@ -95,6 +95,7 @@ namespace Tanks
             }
         }
 
+
         public Image GetImage()
         {
             return image;

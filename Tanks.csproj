@@ -56,6 +56,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bullet.cs" />
+    <Compile Include="MapObject.cs" />
     <Compile Include="Tank.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -108,10 +109,13 @@
     <Resource Include="ImageTank\Bullet.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ImageTank\Eтанк.png" />
+    <Resource Include="ImageTank\Dead.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ImageTank\Dead.png" />
+    <Resource Include="ImageTank\EvilTank.png" />
+    <Resource Include="ImageTank\EvilTankD.png" />
+    <Resource Include="ImageTank\EvilTankLpng.png" />
+    <Resource Include="ImageTank\EvilTankR.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

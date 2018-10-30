@@ -18,14 +18,23 @@ namespace Tanks
     {
         Image image;
         
-        private string _orient="Up";
+        private string _orient="Down";
         private string _name;
         private int _health;
+        private double _timeTurn;
         private int _positionToX;
         private int _positionToY;
         private int _previousPositionX;
         private int _previousPositionY;
 
+        public double TimeTurn {
+            get {
+                return _timeTurn;
+            }
+            set {
+                _timeTurn = value;
+            }
+        }
         public int Health
         {
             get
@@ -105,7 +114,7 @@ namespace Tanks
         }
         public Tank(string name, int x, int y, string tankOr)
         {
-            Health = 1;
+            Health = 4;
             PositionToX = x + 31;
             PositionToY = y + 29;
             PreviousPositionToX = PositionToX;
@@ -116,12 +125,6 @@ namespace Tanks
         public void Damage()
         {
             Health--;
-            if (Health == 0)
-            {
-
-                //MessageBox.Show("Вы его убили!");
-                //DeadTank();
-            }
         }
         private void DeadTank()
         {
@@ -137,7 +140,7 @@ namespace Tanks
             var uri = new Uri("pack://application:,,,/ImageTank/"+tankOr+".png");
             var bitmap = new BitmapImage(uri);
             image.Source = bitmap;
-            foreach (Window window in Application.Current.Windows)
+            foreach (Window window in  Application.Current.Windows)
             {
                 if (window.GetType() == typeof(MainWindow))
                 {
@@ -145,6 +148,9 @@ namespace Tanks
                 }
             }
 
+        }
+        public void AddUri(Uri uri) {
+            image.Source = new BitmapImage(uri);
         }
         public Image GetImage()
         {
