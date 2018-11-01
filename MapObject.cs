@@ -4,36 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows;
 using System.Windows.Shapes;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
+
 
 namespace Tanks
 {
-    public class MapObject : Shape
+    public class MapObject 
     {
-        private int _width;
-        private int _height;
         private int _x;
         private int _y;
-        public int WidthRange
-        {
-            get {
-                return _width;
-            }
-            set {
-                _width = value;
-            }
-        }
-        public int HeightRange
-        {
-            get
-            {
-                return _height;
-            }
-            set
-            {
-                _height = value;
-            }
-        }
         public int X
         {
             get
@@ -56,27 +39,44 @@ namespace Tanks
                 _y = value;
             }
         }
-        Rectangle rectangle = new Rectangle();
-        MapObject(int x, int y)
+        Rectangle rectangle;
+        public MapObject(int x, int y, int width, int height)
         {
-            X = x;
-            Y = y;
-        }
-
-        void PlottingWidthAndHeight(int n, int width, int height)
-        {
+            rectangle = new Rectangle();
+            X = x ;
+            Y = y ;
             rectangle.Width = width;
             rectangle.Height = height;
+            drawing();
         }
 
-        private bool IsdCheckRange(int x, int y) {
-            if (x >= X && x <= rectangle.Width)
-                return false;
-            if (y >= Y && y <= rectangle.Height)
+        public bool IsdCheckRange(int x, int y) {
+            if ((x >= X && x <= rectangle.Width) || (y >= Y && y <= rectangle.Height))
                 return false;
             return true;
         }
+        public bool IsCheckMove(int objectX, int objectY)
+        {
+            if (Math.Abs(objectX - X) < 58 )||(Math.Abs(objectY - Y) < 58))
+                return false;
+            return true;
+        }
+        private void drawing() {
 
-        protected override Geometry DefiningGeometry => throw new NotImplementedException();
+            rectangle.Fill = Brushes.Green;
+
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window.GetType() == typeof(MainWindow))
+                {
+                    (window as MainWindow).canvas.Children.Add(rectangle);
+                }
+            }
+        }
+
+        public Rectangle GetRectangle() {
+            return rectangle;
+        }
+      
     }
 }

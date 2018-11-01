@@ -18,7 +18,7 @@ namespace Tanks
     {
         Image image;
         
-        private string _orient="Down";
+        private string _orient="Up";
         private string _name;
         private int _health;
         private double _timeTurn;
@@ -112,10 +112,11 @@ namespace Tanks
                 _name = value;
             }
         }
+
         public Tank(string name, int x, int y, string tankOr)
         {
             Health = 4;
-            PositionToX = x + 31;
+            PositionToX = x + 29;
             PositionToY = y + 29;
             PreviousPositionToX = PositionToX;
             PreviousPositionToY = PositionToY;
@@ -135,12 +136,12 @@ namespace Tanks
         public void Drawing(string tankOr)
         {
             image = new Image();
-            image.Width = 60;
-            image.Height = 60;
+            image.Width = 58;
+            image.Height = 58;
             var uri = new Uri("pack://application:,,,/ImageTank/"+tankOr+".png");
             var bitmap = new BitmapImage(uri);
             image.Source = bitmap;
-            foreach (Window window in  Application.Current.Windows)
+            foreach (Window window in Application.Current.Windows)
             {
                 if (window.GetType() == typeof(MainWindow))
                 {

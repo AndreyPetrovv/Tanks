@@ -51,7 +51,6 @@ namespace Tanks
                 _orient = value;
             }
         }
-
         public Bullet(int positionToX,int positionToY,string orient) {
             BulletPositionToX = positionToX + 25;
             BulletPositionToY = positionToY;
@@ -77,7 +76,6 @@ namespace Tanks
             }
             drawing();
         }
-
         private void drawing()
         {
             image = new Image();
@@ -94,13 +92,10 @@ namespace Tanks
                 }
             }
         }
-
-
         public Image GetImage()
         {
             return image;
         }
-
         public void flight() {
             int i = 3;
             switch (Orient)
