@@ -57,9 +57,13 @@ namespace Tanks
         }
         public bool IsCheckMove(int objectX, int objectY)
         {
-            if (Math.Abs(objectX - X) < 58 )||(Math.Abs(objectY - Y) < 58))
-                return false;
-            return true;
+            //if (((Math.Abs(objectX - X) < 60) && (Math.Abs(objectY - Y) < 60)))
+            //{
+            if (Math.Abs((objectX +29) - (X + 60)) >= 89 || Math.Abs((objectY + 29) - (Y + 60)) >= 89)
+                return true;
+            return false;
+            //}
+            //return true;
         }
         private void drawing() {
 

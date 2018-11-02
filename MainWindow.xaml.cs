@@ -76,8 +76,8 @@ namespace Tanks
                 Thread.Sleep(1);
                 for (int i = 0; i < windowTank.Count; i++)
                 {
-                    //try
-                    //{
+                    try
+                    {
                     for (int j = 0; j < windowTank.Count; j++)
                     {
                         if (windowTank[i] != windowTank[j])
@@ -107,6 +107,7 @@ namespace Tanks
                                 Dispatcher.Invoke(() => Canvas.SetLeft(windowTank[i].GetImage(), windowTank[i].PositionToX));
                             }
                             else {
+                                    CheckListObjectMap(windowTank[i]);
                                 windowTank[i].PositionToY = windowTank[i].PreviousPositionToY;
                                 windowTank[i].PositionToX = windowTank[i].PreviousPositionToX;
                             }
@@ -114,8 +115,8 @@ namespace Tanks
                     }
 
 
-                    //}
-                    //catch { }
+                    }
+                    catch { }
                     if (windowTank[i].Health == 0)
                     {
                         Dispatcher.Invoke(() => canvas.Children.Remove(windowTank[i].GetImage()));
@@ -152,11 +153,12 @@ namespace Tanks
                     }
                     if (i <= windowBullet.Count - 1)
                         if ((windowBullet[i].BulletPositionToY > 686 || windowBullet[i].BulletPositionToY < 0) ||
-                            (windowBullet[i].BulletPositionToX > 1180 || windowBullet[i].BulletPositionToX < 0))
+                            (windowBullet[i].BulletPositionToX > 1180 || windowBullet[i].BulletPositionToX < 0) || CheckListObjectMap(windowBullet[i]))
                         {
                             Dispatcher.Invoke(() => canvas.Children.Remove(windowBullet[i].GetImage()));
                             windowBullet.Remove(windowBullet[i]);
                         }
+                    
                 }
             }
         }
@@ -241,6 +243,17 @@ namespace Tanks
             foreach (var item in listMapObjects)
             {
                 if (item.IsCheckMove(tank.PositionToX, tank.PositionToY))
+                    continue;
+                else
+                    return false;
+            }
+            return true;
+        }
+        private bool CheckListObjectMap(Bullet bullet)
+        {
+            foreach (var item in listMapObjects)
+            {
+                if (item.IsCheckMove(bullet.BulletPositionToX, bullet.BulletPositionToY))
                     continue;
                 else
                     return false;
