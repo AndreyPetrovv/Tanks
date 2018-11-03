@@ -50,20 +50,31 @@ namespace Tanks
             drawing();
         }
 
-        public bool IsdCheckRange(int x, int y) {
-            if ((x >= X && x <= rectangle.Width) || (y >= Y && y <= rectangle.Height))
-                return false;
+        public bool IsCheckRange(Tank tankOne, Tank tankTwo, bool isCheck)
+        {
+            if (isCheck)
+            {
+                if (tankTwo.PositionToX + 29 >= X && tankOne.PositionToX + 29 <= (X + rectangle.Width))
+                    if (tankOne.PositionToY < Y && Y < tankTwo.PositionToY)
+                        return false;
+                    else if (tankOne.PositionToY > Y && Y > tankTwo.PositionToY)
+                        return false;
+            }
+            else
+            {
+                if (tankTwo.PositionToY + 29 >= Y && tankTwo.PositionToY + 29 <= (Y + rectangle.Height))
+                    if (tankOne.PositionToX < X && X < tankTwo.PositionToX)
+                        return false;
+                    else if (tankOne.PositionToX > X && X > tankTwo.PositionToX)
+                        return false;
+            }
             return true;
         }
-        public bool IsCheckMove(int objectX, int objectY)
+        public bool IsCheckMove(int objectX, int objectY,double n)
         {
-            //if (((Math.Abs(objectX - X) < 60) && (Math.Abs(objectY - Y) < 60)))
-            //{
-            if (Math.Abs((objectX +29) - (X + 60)) >= 89 || Math.Abs((objectY + 29) - (Y + 60)) >= 89)
+            if (Math.Abs((objectX + n) - (X + rectangle.Width / 2)) >= (rectangle.Width / 2 + n) || Math.Abs((objectY + n) - (Y + rectangle.Height/2)) >= (rectangle.Height/2 + n))
                 return true;
             return false;
-            //}
-            //return true;
         }
         private void drawing() {
 

@@ -16,16 +16,17 @@ namespace Tanks
 {
     public class Tank
     {
+
         Image image;
-        
         private string _orient="Up";
         private string _name;
         private int _health;
-        private double _timeTurn;
+        private double _timeTurn = 0;
         private int _positionToX;
         private int _positionToY;
         private int _previousPositionX;
         private int _previousPositionY;
+
 
         public double TimeTurn {
             get {
@@ -116,8 +117,8 @@ namespace Tanks
         public Tank(string name, int x, int y, string tankOr)
         {
             Health = 4;
-            PositionToX = x + 29;
-            PositionToY = y + 29;
+            PositionToX = x ;
+            PositionToY = y ;
             PreviousPositionToX = PositionToX;
             PreviousPositionToY = PositionToY;
             _name = name;
