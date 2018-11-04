@@ -59,14 +59,14 @@ namespace Tanks
             {
                 case "Up":
                     BulletPositionToX = positionToX + 25;
-                    BulletPositionToY = positionToY;
+                    BulletPositionToY = positionToY - 10;
                     break;
                 case "Down":
                     BulletPositionToX = positionToX + 25;
                     BulletPositionToY = positionToY + 62; 
                     break;
                 case "Left":
-                    BulletPositionToX = positionToX;
+                    BulletPositionToX = positionToX - 10;
                     BulletPositionToY = positionToY + 25;
                     break;
                 case "Right":

@@ -13,7 +13,7 @@ using System.Windows.Threading;
 
 namespace Tanks
 {
-    public class MapObject 
+    public class MapObject
     {
         private int _x;
         private int _y;
@@ -43,13 +43,13 @@ namespace Tanks
         public MapObject(int x, int y, int width, int height)
         {
             rectangle = new Rectangle();
-            X = x ;
-            Y = y ;
+            X = x;
+            Y = y;
             rectangle.Width = width;
             rectangle.Height = height;
             drawing();
         }
-
+        public MapObject() { }
         public bool IsCheckRange(Tank tankOne, Tank tankTwo, bool isCheck)
         {
             if (isCheck)
@@ -70,13 +70,15 @@ namespace Tanks
             }
             return true;
         }
-        public bool IsCheckMove(int objectX, int objectY,double n)
+        public bool IsCheckMove(int objectX, int objectY, double n)
         {
-            if (Math.Abs((objectX + n) - (X + rectangle.Width / 2)) >= (rectangle.Width / 2 + n) || Math.Abs((objectY + n) - (Y + rectangle.Height/2)) >= (rectangle.Height/2 + n))
+            if (Math.Abs((objectX + n) - (X + rectangle.Width / 2)) >= (rectangle.Width / 2 + n) ||
+                Math.Abs((objectY + n) - (Y + rectangle.Height / 2)) >= (rectangle.Height / 2 + n))
                 return true;
             return false;
         }
-        private void drawing() {
+        private void drawing()
+        {
 
             rectangle.Fill = Brushes.Green;
 
@@ -88,10 +90,10 @@ namespace Tanks
                 }
             }
         }
-
-        public Rectangle GetRectangle() {
+        public Rectangle GetRectangle()
+        {
             return rectangle;
         }
-      
+
     }
 }

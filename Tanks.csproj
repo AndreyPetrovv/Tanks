@@ -117,5 +117,8 @@
     <Resource Include="ImageTank\EvilTankLpng.png" />
     <Resource Include="ImageTank\EvilTankR.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageTank\OBJECT.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
