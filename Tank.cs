@@ -21,19 +21,19 @@ namespace Tanks
         private string _orient="Up";
         private string _name;
         private int _health;
-        private double _timeTurn = 0;
+        private double _time = 0;
         private int _positionToX;
         private int _positionToY;
         private int _previousPositionX;
         private int _previousPositionY;
 
 
-        public double TimeTurn {
+        public double Time {
             get {
-                return _timeTurn;
+                return _time;
             }
             set {
-                _timeTurn = value;
+                _time = value;
             }
         }
         public int Health

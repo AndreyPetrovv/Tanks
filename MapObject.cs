@@ -40,14 +40,12 @@ namespace Tanks
             }
         }
         Rectangle rectangle;
-        public MapObject(int x, int y, int width, int height)
+        public MapObject(int width, int height)
         {
             rectangle = new Rectangle();
-            X = x;
-            Y = y;
             rectangle.Width = width;
             rectangle.Height = height;
-            drawing();
+            rectangle.Fill = Brushes.Green;
         }
         public MapObject() { }
         public bool IsCheckRange(Tank tankOne, Tank tankTwo, bool isCheck)
@@ -76,19 +74,6 @@ namespace Tanks
                 Math.Abs((objectY + n) - (Y + rectangle.Height / 2)) >= (rectangle.Height / 2 + n))
                 return true;
             return false;
-        }
-        private void drawing()
-        {
-
-            rectangle.Fill = Brushes.Green;
-
-            foreach (Window window in Application.Current.Windows)
-            {
-                if (window.GetType() == typeof(MainWindow))
-                {
-                    (window as MainWindow).canvas.Children.Add(rectangle);
-                }
-            }
         }
         public Rectangle GetRectangle()
         {
