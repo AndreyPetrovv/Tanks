@@ -15,8 +15,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Button x:Name="addTank" Content="Добавить танк"  HorizontalAlignment="Left" Margin="50,10,0,0" VerticalAlignment="Top" Width="115" />
-        <Grid x:Name="mapGrid" Margin="9,51,10.2,0.6" Width="1220" Height="718" RenderTransformOrigin="0.495,0.387">
-            <Canvas x:Name="canvas" x:FieldModifier="public" Background="Gray" HorizontalAlignment="Left" Width="1220" Height="718" Margin="0,-10,0,10" />
+        <Grid x:Name="mapGrid"  Width="1210" Height="721" HorizontalAlignment="Center" VerticalAlignment="Bottom" RenderTransformOrigin="0.495,0.387" Margin="15,0,14.2,9.6">
+            <Canvas x:Name="canvas" x:FieldModifier="public" Background="Gray" Width="1210" Height="721" />
         </Grid>
         <TextBlock x:Name="text" x:FieldModifier="public" HorizontalAlignment="Left" Margin="300,10,0,0" TextWrapping="Wrap" Text="Кол-во танков портивника" VerticalAlignment="Top" Width="165"/>
         <TextBlock x:Name="Num" HorizontalAlignment="Left" Margin="470,10,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>

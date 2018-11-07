@@ -23,14 +23,10 @@ namespace Tanks
     /// </summary>
     public partial class MainWindow : Window
     {
-        static List<MapObject> listMapObjects = new List<MapObject> ();
+        static List<MapObject> listMapObjects = new List<MapObject>();
         static List<Tank> windowTank = new List<Tank>();
         static List<Bullet> windowBullet = new List<Bullet>();
         static List<MapObject> mapObjects = new List<MapObject>();
-        static List<Image> images = new List<Image>() {
-            new Image()
-
-        };
 
         Thread objectMappingTank;
         Thread objectMappingBullet;
@@ -56,12 +52,12 @@ namespace Tanks
             {
                 mapGrid.RowDefinitions.Add(new RowDefinition());
             }
-            for (int i = 1; i < 11; i+=2)
+            for (int i = 1; i < 11; i += 2)
             {
-                for (int j = 1; j < 7; j+=2)
+                for (int j = 1; j < 7; j += 2)
                 {
-                    MapObject mapObject = new MapObject(111, 103);
-                    mapObject.X = i * 111;
+                    MapObject mapObject = new MapObject(110, 103);
+                    mapObject.X = i * 110;
                     mapObject.Y = j * 103;
                     mapGrid.Children.Add(mapObject.GetRectangle());
                     Grid.SetColumn(mapObject.GetRectangle(), i);
@@ -75,7 +71,8 @@ namespace Tanks
         {
             tank = new Tank("1", 295, 5, "танк");
             windowTank.Add(tank);
-            windowTank.Add(new Tank("2", 200, 358, "EvilTank"));
+            //windowTank.Add(new Tank("2", 200, 5, "EvilTank"));
+            windowTank.Add(new Tank("2", 225, 658, "EvilTank"));
         }
         private void InitializanionThread() {
             objectMappingTank = new Thread(ThreadMapingTank);
@@ -97,7 +94,8 @@ namespace Tanks
                     for (int i = 1; i < windowTank.Count; i++)
                     {
 
-                        this.TurnTheTank(windowTank[i]);
+                        СonditionTurnTheTank(windowTank[i]);
+                        BotTankMove(windowTank[i]);
                     }
                 }
                 catch { }
@@ -112,51 +110,15 @@ namespace Tanks
                 Thread.Sleep(1);
                 for (int i = 0; i < windowTank.Count; i++)
                 {
+                    DateTime time = DateTime.Now;
                     try
                     {
-                        for (int j = 0; j < windowTank.Count; j++)
-                        {
-                            if (windowTank[i] != windowTank[j])
-                            {
-
-                                if ((Math.Abs(windowTank[i].PositionToX - windowTank[j].PositionToX) > 58 ||
-                                    Math.Abs(windowTank[i].PositionToY - windowTank[j].PositionToY) > 58) && IsBeingOnTheMap(windowTank[i]))
-                                {
-                                    if (Dispatcher.Invoke(() => CheckListObjectMap(windowTank[i])))
-                                    {
-                                        Dispatcher.Invoke(() => Canvas.SetTop(windowTank[i].GetImage(), windowTank[i].PositionToY));
-                                        Dispatcher.Invoke(() => Canvas.SetLeft(windowTank[i].GetImage(), windowTank[i].PositionToX));
-                                    }
-                                }
-                                else
-                                {
-                                    windowTank[i].PositionToY = windowTank[i].PreviousPositionToY;
-                                    windowTank[i].PositionToX = windowTank[i].PreviousPositionToX;
-                                }
-
-                            }
-                            else
-                            {
-                                if (Dispatcher.Invoke(() => CheckListObjectMap(windowTank[i])) && IsBeingOnTheMap(windowTank[i]))
-                                {
-                                    Dispatcher.Invoke(() => Canvas.SetTop(windowTank[i].GetImage(), windowTank[i].PositionToY));
-                                    Dispatcher.Invoke(() => Canvas.SetLeft(windowTank[i].GetImage(), windowTank[i].PositionToX));
-                                }
-                                else
-                                {
-                                    windowTank[i].PositionToY = windowTank[i].PreviousPositionToY;
-                                    windowTank[i].PositionToX = windowTank[i].PreviousPositionToX;
-                                }
-                            }
-                        }
-
-
+                        Collision(windowTank[i]);
                     }
                     catch { }
                     if (windowTank[i].Health == 0)
                     {
                         Dispatcher.Invoke(() => canvas.Children.Remove(windowTank[i].GetImage()));
-
                         windowTank.Remove(windowTank[i]);
                         Dispatcher.Invoke(() => Num.Text = (Convert.ToInt32(Num.Text) - 1).ToString());
                     }
@@ -180,19 +142,16 @@ namespace Tanks
                             if (ChargeDestructionCheck(windowTank[j], windowBullet[i]))
                             {
                                 windowTank[j].Damage();
-                                Dispatcher.Invoke(() => canvas.Children.Remove(windowBullet[i].GetImage()));
-                                windowBullet.Remove(windowBullet[i]);
+                                DeleteBullet(windowBullet[i]);
                             }
                         }
                         catch { }
                     }
-                    if (i <= windowBullet.Count - 1)
-                        if (IsBeingOnTheMap(windowBullet[i]) || !Dispatcher.Invoke(() => CheckListObjectMap(windowBullet[i])) )
+                    if (i <= windowBullet.Count - 1 && (IsBeingOnTheMap(windowBullet[i]) || !Dispatcher.Invoke(() => CheckListObjectMap(windowBullet[i]))))
                         {
-                            Dispatcher.Invoke(() => canvas.Children.Remove(windowBullet[i].GetImage()));
-                            windowBullet.Remove(windowBullet[i]);
+                            DeleteBullet(windowBullet[i]);
                         }
-                    
+
                 }
                 Thread.Sleep(17);
             }
@@ -200,9 +159,62 @@ namespace Tanks
 
         private void BotTankMove(Tank tank)
         {
-            //tank.Move("Up", 0, -5, new Uri("pack://application:,,,/ImageTank/EvilTank.png"));
+            switch (tank.OrientationMove)
+            {
+                case "Up":
+                    if (IsBeingOnTheMap(tank) && Dispatcher.Invoke(() => CheckListObjectMap(tank)) && tank.passed < 211)
+                    {
+                        Dispatcher.Invoke(() => tank.Move("Up", 0, -1, new Uri("pack://application:,,,/ImageTank/EvilTank.png")));
+                        Dispatcher.Invoke(() => tank.passed++);
+                    }
+                    else
+                    {
+                        Dispatcher.Invoke(() => tank.OrientationMove = "Right");
+                        Dispatcher.Invoke(() => tank.passed = 0);
+                    }
+                    break;
+                case "Down":
+                    if (IsBeingOnTheMap(tank) && Dispatcher.Invoke(() => CheckListObjectMap(tank)) && tank.passed < 211)
+                    {
+                        Dispatcher.Invoke(() => tank.Move("Down", 0, 1, new Uri("pack://application:,,,/ImageTank/танкD.png")));
+                        Dispatcher.Invoke(() => tank.passed++);
+
+                    }
+                    else
+                    {
+                        Dispatcher.Invoke(() => tank.OrientationMove = "Up");
+                        Dispatcher.Invoke(() => tank.passed = 0);
+                    }
+                    break;
+                case "Left":
+                    if (IsBeingOnTheMap(tank) && Dispatcher.Invoke(() => CheckListObjectMap(tank)) && tank.passed < 211)
+                    {
+                        Dispatcher.Invoke(() => tank.Move("Left", -1, 0, new Uri("pack://application:,,,/ImageTank/танкL.png")));
+                        Dispatcher.Invoke(() => tank.passed++);
+
+                    }
+                    else
+                    {
+                        Dispatcher.Invoke(() => tank.OrientationMove = "Up");
+                        Dispatcher.Invoke(() => tank.passed = 0);
+                    }
+                    break;
+                case "Right":
+                    if (IsBeingOnTheMap(tank) && Dispatcher.Invoke(() => CheckListObjectMap(tank)) && tank.passed < 211)
+                    {
+                        Dispatcher.Invoke(() => tank.Move("Right", 1, 0, new Uri("pack://application:,,,/ImageTank/танкR.png")));
+                        Dispatcher.Invoke(() => tank.passed++);
+
+                    }
+                    else
+                    {
+                        Dispatcher.Invoke(() => tank.OrientationMove = "Down");
+                        Dispatcher.Invoke(() => tank.passed = 0);
+                    }
+                    break;
+            }
         }
-        private void TurnTheTank(Tank tank)
+        private void СonditionTurnTheTank(Tank tank)
         {
             if ((Math.Abs(windowTank[0].PositionToX - tank.PositionToX) < 58 &&
                 windowTank[0].PositionToY > tank.PositionToY))
@@ -211,7 +223,7 @@ namespace Tanks
                     tank.Health != 4) && Dispatcher.Invoke(() => CheckListRange(tank, true)))
                 {
                     Turn(tank, new Uri("pack://application:,,,/ImageTank/EvilTankD.png"), "Down");
-                    this.TankShot();
+                    this.TankShot(tank);
                 }
             }
             else if ((Math.Abs(windowTank[0].PositionToX - tank.PositionToX) < 58 &&
@@ -221,7 +233,7 @@ namespace Tanks
                     tank.Health != 4) && Dispatcher.Invoke(() => CheckListRange(tank, true)))
                 {
                     Turn(tank, new Uri("pack://application:,,,/ImageTank/EvilTank.png"), "Up");
-                    this.TankShot();
+                    this.TankShot(tank);
                 }
             }
             else if ((Math.Abs(windowTank[0].PositionToY - tank.PositionToY) < 58 &&
@@ -231,7 +243,7 @@ namespace Tanks
                     tank.Health != 4) && Dispatcher.Invoke(() => CheckListRange(tank, false)))
                 {
                     Turn(tank, new Uri("pack://application:,,,/ImageTank/EvilTankR.png"), "Right");
-                    this.TankShot();
+                    this.TankShot(tank);
                 }
             }
             else if ((Math.Abs(windowTank[0].PositionToY - tank.PositionToY) < 58 &&
@@ -241,7 +253,7 @@ namespace Tanks
                     tank.Health != 4) && Dispatcher.Invoke(() => CheckListRange(tank, false)))
                 {
                     Turn(tank, new Uri("pack://application:,,,/ImageTank/EvilTankLpng.png"), "Left");
-                    this.TankShot();
+                    this.TankShot(tank);
                 }
             }
 
@@ -252,34 +264,94 @@ namespace Tanks
             Dispatcher.Invoke(() => tank.AddUri(uri));
             Dispatcher.Invoke(() => tank.Orient = orient);
         }
-        private void TankShot()
+        private void TankShot(Tank tank)
         {
 
-            for (int i = 1; i < windowTank.Count; i++)
+            if ((Math.Abs(windowTank[0].PositionToX - tank.PositionToX) < 34 ||
+                            Math.Abs(windowTank[0].PositionToY - tank.PositionToY) < 34) && IsRecgarge(tank) && ShotDelayBot(tank))
             {
-
-                if ( (Math.Abs(windowTank[0].PositionToX - windowTank[i].PositionToX) < 34 ||
-                                Math.Abs(windowTank[0].PositionToY - windowTank[i].PositionToY) < 34))
-                {
-                        Dispatcher.Invoke(() => windowTank[i].Shot(ref windowBullet));
-                        Thread.Sleep(1000);
-                }
-
+                Dispatcher.Invoke(() => tank.Shot(ref windowBullet));
+                tank.RecgargeShot = DateTime.Now;
+                tank.ShotDelay = DateTime.Now;
+                tank.Clip--;
             }
 
         }
 
-        private static bool IsBeingOnTheMap(Tank tank) {
-            if ((tank.PositionToY > 663 || tank.PositionToY < 0) || (tank.PositionToX > 1098 || tank.PositionToX < 0))
+        private bool IsRecgarge(Tank tank)
+        {
+            DateTime time = DateTime.Now;
+            if (tank.Clip == 0)
+                if (tank.RecgargeShot.Minute == time.Minute && time.Second - tank.RecgargeShot.Second < 10)
+                {
+                    return false;
+                }
+                else if ((time.Second + 60 * (time.Minute - tank.RecgargeShot.Minute)) - tank.RecgargeShot.Second < 10)
+                    return false;
+
+            return true;
+        }
+        private bool ShotDelayBot(Tank tank)
+        {
+            DateTime time = DateTime.Now;
+            if (time.Second + 60 * (time.Minute - tank.ShotDelay.Minute) - tank.ShotDelay.Second < 1)
+                    return false;
+            return true;
+        }
+        private void Collision(Tank tank)
+        {
+            for (int j = 0; j < windowTank.Count; j++)
+            {
+                if (tank != windowTank[j])
+                {
+
+                    if (IsThereACollision(tank, windowTank[j]) && IsBeingOnTheMap(tank) && Dispatcher.Invoke(() => CheckListObjectMap(tank)))
+                    {
+                        PositionСhange(tank);
+                    }
+                    else
+                    {
+                        tank.PositionToY = tank.PreviousPositionToY;
+                        tank.PositionToX = tank.PreviousPositionToX;
+                    }
+
+                }
+                else
+                {
+                    if (Dispatcher.Invoke(() => CheckListObjectMap(tank)) && IsBeingOnTheMap(tank))
+                    {
+                        Dispatcher.Invoke(() => Canvas.SetTop(tank.GetImage(), tank.PositionToY));
+                        Dispatcher.Invoke(() => Canvas.SetLeft(tank.GetImage(), tank.PositionToX));
+                    }
+                    else
+                    {
+                        tank.PositionToY = tank.PreviousPositionToY;
+                        tank.PositionToX = tank.PreviousPositionToX;
+                    }
+                }
+            }
+        }
+        private void DeleteBullet(Bullet bullet) {
+            Dispatcher.Invoke(() => canvas.Children.Remove(bullet.GetImage()));
+            windowBullet.Remove(bullet);
+        }
+
+        private bool IsThereACollision(Tank tankOne, Tank tankTwo) {
+            if ((Math.Abs(tankOne.PositionToX - tankTwo.PositionToX) > 58 || Math.Abs(tankOne.PositionToY -tankTwo.PositionToY) > 58))
+                return true;
+            return false;
+        }
+        private bool IsBeingOnTheMap(Tank tank) {
+            if ((tank.PositionToY > 721 || tank.PositionToY < 0) || (tank.PositionToX > 1220 || tank.PositionToX < 0))
                 return false;
             return true;
         }
-        private static bool IsBeingOnTheMap(Bullet bullet) {
+        private bool IsBeingOnTheMap(Bullet bullet) {
             if ((bullet.BulletPositionToY > 704 || bullet.BulletPositionToY < 0) || (bullet.BulletPositionToX > 1144 || bullet.BulletPositionToX < 0))
                 return true;
             return false;
         }
-        private static bool ChargeDestructionCheck(Tank tank, Bullet bullet)
+        private bool ChargeDestructionCheck(Tank tank, Bullet bullet)
         {
             if(Math.Abs((tank.PositionToX + 29) - (bullet.BulletPositionToX + 4.5)) < 33.5 &&
                 Math.Abs((tank.PositionToY + 29) - (bullet.BulletPositionToY + 4.5)) < 33.5)
@@ -320,12 +392,21 @@ namespace Tanks
             }
             return true;
         }
-        
+
+        private void PositionСhange(Tank tank) {
+            Dispatcher.Invoke(() => Canvas.SetTop(tank.GetImage(), tank.PositionToY));
+            Dispatcher.Invoke(() => Canvas.SetLeft(tank.GetImage(), tank.PositionToX));
+        }
+        private void PositionСhange(Bullet bullet)
+        {
+            Dispatcher.Invoke(() => Canvas.SetTop(bullet.GetImage(), bullet.BulletPositionToY));
+            Dispatcher.Invoke(() => Canvas.SetLeft(bullet.GetImage(), bullet.BulletPositionToX));
+        }
 
         private void Button_Click()
         {
             Random r = new Random();
-            windowTank.Add(new Tank("2", r.Next(300,800),r.Next(300,1200), "EvilTank"));
+            windowTank.Add(new Tank("2", r.Next(225,800),r.Next(300,1200), "EvilTank"));
             Num.Text = (Convert.ToInt32(Num.Text) + 1 ).ToString();
         }
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -346,7 +427,12 @@ namespace Tanks
                     tank.Move("Right",5, 0, new Uri("pack://application:,,,/ImageTank/танкR.png"));
                     break;
                 case Key.Space:
-                    tank.Shot(ref windowBullet);
+                    if (IsRecgarge(tank))
+                    {
+                        tank.RecgargeShot = DateTime.Now;
+                        tank.Shot(ref windowBullet);
+                        tank.Clip--;
+                    }
                     break;
                 case Key.Q: Button_Click(); break;
             }

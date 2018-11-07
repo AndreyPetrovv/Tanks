@@ -21,19 +21,28 @@ namespace Tanks
         private string _orient="Up";
         private string _name;
         private int _health;
-        private double _time = 0;
+        private int _clip;
         private int _positionToX;
         private int _positionToY;
         private int _previousPositionX;
         private int _previousPositionY;
 
+        
+        public double passed = 0;
+        public string OrientationMove = "Up";
+        public DateTime ShotDelay;
 
-        public double Time {
-            get {
-                return _time;
+        public bool IsRecgarge = false;
+        public DateTime RecgargeShot;
+        public int Clip
+        {
+            get
+            {
+                return _clip;
             }
-            set {
-                _time = value;
+            set
+            {
+                _clip = value;
             }
         }
         public int Health
@@ -102,7 +111,7 @@ namespace Tanks
                 _orient = value;
             }
         }
-        private string Name
+        public string Name
         {
             get
             {
@@ -117,11 +126,12 @@ namespace Tanks
         public Tank(string name, int x, int y, string tankOr)
         {
             Health = 4;
+            Clip = 3;
             PositionToX = x ;
             PositionToY = y ;
             PreviousPositionToX = PositionToX;
             PreviousPositionToY = PositionToY;
-            _name = name;
+            Name = name;
             Drawing(tankOr);
         }
         public void Damage()
