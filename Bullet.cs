@@ -14,67 +14,39 @@ namespace Tanks
 {
     public class Bullet 
     {
-        Image image;
-        private string _orient;
-        private int _bulletPositionToX;
-        private int _bulletPositionToY;
-        public int BulletPositionToX
+        private Image image;
+        private  Coordinates CoordinatesBullet;
+        private int _flightBulletToX = 0;
+        private int _flightBulletToY = 0;
+        public Bullet(int positionToX, int positionToY, string orient)
         {
-            get
-            {
-                return _bulletPositionToX;
-            }
-            set
-            {
-                _bulletPositionToX = value;
-            }
+            CoordinatesBullet = new Coordinates(positionToX + 25, positionToY);
+            findingOrintation(orient);
+            drawing();
         }
-        public int BulletPositionToY
-        {
-            get
-            {
-                return _bulletPositionToY;
-            }
-            set
-            {
-                _bulletPositionToY = value;
-            }
-        }
-        public string Orient
-        {
-            get
-            {
-                return _orient;
-            }
-            set
-            {
-                _orient = value;
-            }
-        }
-        public Bullet(int positionToX,int positionToY,string orient) {
-            BulletPositionToX = positionToX + 25;
-            BulletPositionToY = positionToY;
-            Orient = orient;
-            switch (Orient)
+        private void findingOrintation(string orient) {
+            int i = 13;
+            switch (orient)
             {
                 case "Up":
-                    BulletPositionToX = positionToX + 25;
-                    BulletPositionToY = positionToY - 10;
+                    CoordinatesBullet.CordinateToY = CoordinatesBullet.CordinateToY - 10;
+                    _flightBulletToY = -i;
                     break;
                 case "Down":
-                    BulletPositionToX = positionToX + 25;
-                    BulletPositionToY = positionToY + 62; 
+                    CoordinatesBullet.CordinateToY = CoordinatesBullet.CordinateToY + 62;
+                    _flightBulletToY = i;
                     break;
                 case "Left":
-                    BulletPositionToX = positionToX - 10;
-                    BulletPositionToY = positionToY + 25;
+                    CoordinatesBullet.CordinateToX = CoordinatesBullet.CordinateToX - 29;
+                    CoordinatesBullet.CordinateToY = CoordinatesBullet.CordinateToY + 25;
+                    _flightBulletToX = -i;
                     break;
                 case "Right":
-                    BulletPositionToX = positionToX +58 ;
-                    BulletPositionToY = positionToY + 25;
+                    CoordinatesBullet.CordinateToX = CoordinatesBullet.CordinateToX + 29;
+                    CoordinatesBullet.CordinateToY = CoordinatesBullet.CordinateToY + 25;
+                    _flightBulletToX = i;
                     break;
             }
-            drawing();
         }
         private void drawing()
         {
@@ -92,28 +64,16 @@ namespace Tanks
                 }
             }
         }
-        public Image GetImage()
+        public Coordinates GetCoordinates {
+            get =>  CoordinatesBullet;
+        }
+        public Image GetImage
         {
-            return image;
+            get => image;
         }
         public void flight() {
-            int i = 3;
-            switch (Orient)
-            {
-                case "Up":
-                    BulletPositionToY -= i;
-                    break;
-                case "Down":
-                    BulletPositionToY += i;
-                    break;
-                case "Left":
-                    BulletPositionToX -= i;
-                    break;
-                case "Right":
-                    BulletPositionToX += i;
-                    break;
-            }
-
+            CoordinatesBullet.CordinateToX += _flightBulletToX;
+            CoordinatesBullet.CordinateToY += _flightBulletToY;
         }
     }
 }

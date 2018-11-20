@@ -10,16 +10,49 @@
         KeyDown="Window_KeyDown"
         Title="MainWindow" Height="800" Width="1250"
         WindowStartupLocation="CenterScreen">
-    <Grid x:Name="field" Margin="0,0,4,0.4">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Button x:Name="addTank" Content="Добавить танк"  HorizontalAlignment="Left" Margin="50,10,0,0" VerticalAlignment="Top" Width="115" />
-        <Grid x:Name="mapGrid"  Width="1210" Height="721" HorizontalAlignment="Center" VerticalAlignment="Bottom" RenderTransformOrigin="0.495,0.387" Margin="15,0,14.2,9.6">
-            <Canvas x:Name="canvas" x:FieldModifier="public" Background="Gray" Width="1210" Height="721" />
-        </Grid>
-        <TextBlock x:Name="text" x:FieldModifier="public" HorizontalAlignment="Left" Margin="300,10,0,0" TextWrapping="Wrap" Text="Кол-во танков портивника" VerticalAlignment="Top" Width="165"/>
-        <TextBlock x:Name="Num" HorizontalAlignment="Left" Margin="470,10,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
 
+    <Grid x:Name="field" RenderTransformOrigin="0.515,0.422"  >
+        <Grid Name="menu" >
+            <ListBox HorizontalAlignment="Center" VerticalAlignment="Center" Height="305"  Width="235" >
+                <Button x:Name="NewGame" Content="New Game" Width="210" Height="30" Margin="5,25,5,15" RenderTransformOrigin="5,5" FontFamily="Showcard Gothic" FontSize="20" Click="NewGame_Click"/>
+                <Button Content="Statistic" Width="210" Height="30" Margin="5,25,5,15" FontSize="20" FontFamily="Showcard Gothic"/>
+                <Button Content="Save" Width="210" Height="30" Margin="5,25,5,15" FontSize="20" FontFamily="Showcard Gothic"/>
+                <Button x:Name="Exit" Content="Exit" Width="210" Height="30" Margin="5,25,5,15" FontSize="20" FontFamily="Showcard Gothic"/>
+            </ListBox>
+
+        </Grid>
+        <Grid Name="MenuNewGame" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,10.2,0.4" Width="1233" RenderTransformOrigin="0.493,0.476" Height="760">
+            <TextBlock HorizontalAlignment="Left" Margin="417,259,0,0" TextWrapping="Wrap" Text="Выбор сложности" VerticalAlignment="Top" Height="31" Width="224" Background="White" FontSize="20" FontFamily="Elephant"/>
+            <ComboBox Name="colTank" HorizontalAlignment="Left" Margin="697,259,0,0" VerticalAlignment="Top" Width="119" Height="31" RenderTransformOrigin="1.042,0.658">
+                <TextBlock FontSize="20" FontFamily="Elephant">1</TextBlock>
+                <TextBlock FontSize="20" FontFamily="Elephant">2</TextBlock>
+                <TextBlock FontSize="20" FontFamily="Elephant">3</TextBlock>
+            </ComboBox>
+            <TextBlock HorizontalAlignment="Left" Margin="417,395,0,0" TextWrapping="Wrap" Text="Выбор карты" VerticalAlignment="Top" Height="31" Width="224" Background="White" FontSize="20" FontFamily="Elephant"/>
+            <ComboBox Name="map" HorizontalAlignment="Left" Margin="695,395,0,0" VerticalAlignment="Top" Width="121" Height="31" RenderTransformOrigin="1.625,3.226">
+                <TextBlock FontSize="20" FontFamily="Elephant">1</TextBlock>
+                <TextBlock FontSize="20" FontFamily="Elephant">2</TextBlock>
+            </ComboBox>
+            <Button x:Name="GameGame" Content="Game!" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="399" Height="80" FontSize="48" Background="White" FontFamily="Showcard Gothic" Click="GameGame_Click" RenderTransformOrigin="0.243,0.19" Margin="417,0,417,114"/>
+        </Grid>
+        <Grid Name="Game" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="mapGrid"  Width="1210" Height="714" HorizontalAlignment="Center" VerticalAlignment="Bottom" RenderTransformOrigin="0.495,0.387" Margin="15,0,14.2,9.6">
+                <Canvas x:Name="canvas" ZIndex="1" x:FieldModifier="public"  Width="1210" Height="714" />
+            </Grid>
+            <TextBlock x:Name="text" x:FieldModifier="public" HorizontalAlignment="Left" Margin="531,13,0,0" TextWrapping="Wrap" Text="Кол-во танков портивника :" VerticalAlignment="Top" Width="190" FontSize="14"/>
+            <TextBlock x:Name="Num" HorizontalAlignment="Left" Margin="722,13,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBlock HorizontalAlignment="Left" Margin="20,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="25" Text="ХP : " FontSize="14"/>
+            <TextBlock x:Name="Xp" HorizontalAlignment="Left" Margin="50,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="25" Text="4" FontSize="14"/>
+            <TextBlock HorizontalAlignment="Left" Margin="85,12,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Text="Снарядов : " FontSize="14"/>
+            <TextBlock x:Name="Oboim" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="25" Text="3" FontSize="14" Margin="165,13,0,0"/>
+        </Grid>
+        <Grid Name="MenuPostGame" Visibility="Collapsed" VerticalAlignment="Center" HorizontalAlignment="Center"  Width="733" Height="452" >
+            <Button x:Name="SaveTimeGame" Content="Save Time Game" HorizontalAlignment="Left" Margin="10,334,0,0" VerticalAlignment="Top" Width="330" Height="70" FontSize="36" Background="White" FontFamily="Showcard Gothic" Click="SaveTimeGame_Click"/>
+            <Button x:Name="OpenMenu" Content="Open Menu" HorizontalAlignment="Left" Margin="380,335,0,0" VerticalAlignment="Top" Width="298" Height="70" FontSize="36" Background="White" FontFamily="Showcard Gothic" Click="OpenMenu_Click"/>
+            <TextBlock Name="TimeGame" HorizontalAlignment="Center"  TextWrapping="Wrap" Text="Time" VerticalAlignment="Center" Height="120" Width="430" FontSize="36" TextAlignment="Center" LineHeight="16"/>
+        </Grid>
     </Grid>
 </Window>

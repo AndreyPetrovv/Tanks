@@ -13,3 +13,5 @@ C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks
 C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\Tanks.csproj.CoreCompileInputs.cache
 C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\Tanks.exe
 C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\Tanks.pdb
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\Menu.g.cs
+C:\Users\echon\OneDrive\Программирование\C#\RGR & Kursovie\Tanks\Tanks\obj\Debug\Menu.baml

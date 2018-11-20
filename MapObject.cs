@@ -39,45 +39,52 @@ namespace Tanks
                 _y = value;
             }
         }
-        Rectangle rectangle;
-        public MapObject(int width, int height)
+        Image Image;
+        public MapObject(double width, double height)
         {
-            rectangle = new Rectangle();
-            rectangle.Width = width;
-            rectangle.Height = height;
-            rectangle.Fill = Brushes.Green;
+            Image = new Image();
+            
+            //Image.Width = width;
+            //Image.Height = height;
         }
         public MapObject() { }
         public bool IsCheckRange(Tank tankOne, Tank tankTwo, bool isCheck)
         {
             if (isCheck)
             {
-                if (tankTwo.PositionToX + 29 >= X && tankOne.PositionToX + 29 <= (X + rectangle.Width))
-                    if (tankOne.PositionToY < Y && Y < tankTwo.PositionToY)
+                if (tankTwo.GetCoordinates.CordinateToX + 29 >= X && tankOne.GetCoordinates.CordinateToX + 29 <= (X + 110))
+                    if (tankOne.GetCoordinates.CordinateToY < Y && Y < tankTwo.GetCoordinates.CordinateToY)
                         return false;
-                    else if (tankOne.PositionToY > Y && Y > tankTwo.PositionToY)
+                    else if (tankOne.GetCoordinates.CordinateToY > Y && Y > tankTwo.GetCoordinates.CordinateToY)
                         return false;
             }
             else
             {
-                if (tankTwo.PositionToY + 29 >= Y && tankTwo.PositionToY + 29 <= (Y + rectangle.Height))
-                    if (tankOne.PositionToX < X && X < tankTwo.PositionToX)
+                if (tankTwo.GetCoordinates.CordinateToY + 29 >= Y && tankTwo.GetCoordinates.CordinateToY + 29 <= (Y + 102))
+                    if (tankOne.GetCoordinates.CordinateToX < X && X < tankTwo.GetCoordinates.CordinateToX)
                         return false;
-                    else if (tankOne.PositionToX > X && X > tankTwo.PositionToX)
+                    else if (tankOne.GetCoordinates.CordinateToX > X && X > tankTwo.GetCoordinates.CordinateToX)
                         return false;
             }
             return true;
         }
         public bool IsCheckMove(int objectX, int objectY, double n)
         {
-            if (Math.Abs((objectX + n) - (X + rectangle.Width / 2)) >= (rectangle.Width / 2 + n) ||
-                Math.Abs((objectY + n) - (Y + rectangle.Height / 2)) >= (rectangle.Height / 2 + n))
+            if (Math.Abs((objectX + n) - (X + 55 )) >= (55 + n) ||
+                Math.Abs((objectY + n) - (Y + 51 )) >= (51 + n))
                 return true;
             return false;
         }
-        public Rectangle GetRectangle()
+        public void SetImage(string type)
         {
-            return rectangle;
+            if (type == "0")
+                Image.Source = new BitmapImage(new Uri("pack://application:,,,/ImageMap/tileSand2.png"));
+            else
+                Image.Source = new BitmapImage(new Uri("pack://application:,,,/ImageMap/crateMetal.png"));
+        }
+        public Image GetImage()
+        {
+            return Image;
         }
 
     }
