@@ -15,6 +15,9 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Threading;
 using System.Diagnostics;
+using System.IO;
+using System.Xml.Serialization;
+
 
 namespace Tanks
 {
@@ -29,6 +32,7 @@ namespace Tanks
         static List<Tank> windowTank = new List<Tank>();
         static List<Bullet> windowBullet = new List<Bullet>();
         static Random _rand = new Random(Environment.TickCount);
+        static Point Coordinat_Bot_Tank;
         static Tank tank;
         Thread objectMappingTank;
         Thread objectMappingBullet;
@@ -37,87 +41,88 @@ namespace Tanks
         public MainWindow()
         {
             InitializeComponent();
-            
+
+            //InitializanionMap();
+            //InitializanionTank();
+            //InitializanionThread();
+
         }
 
         private void InitializanionMap()
         {
-            if (!GAME)
-            {
-                for (int i = 0; i < 11; i++)
-                {
-                    mapGrid.ColumnDefinitions.Add(new ColumnDefinition());
-                }
-                for (int i = 0; i < 7; i++)
-                {
-                    mapGrid.RowDefinitions.Add(new RowDefinition());
-                }
-            }
             string[] mapp;
             if (map.Text == "1")
                 mapp = new string[7]
         {
-                "00000000000",
+                "00010000000",
                 "01010101010",
                 "00000000000",
                 "01010101010",
                 "00000000000",
                 "01010101010",
-                "00000000000"
+                "000000B0000"
         };
-            else
+            else if (map.Text == "2")
                 mapp = new string[7]
             {
-                "00001100000",
-                "00010010000",
-                "00010010000",
-                "00010010000",
-                "01000001100",
-                "10000100001",
-                "01110001110"
+                "000000000000",
+                "001110111011",
+                "000100010000",
+                "100100010010",
+                "010001000000",
+                "000101010101",
+                "00B000000000"
             };
-            for (int i = 0; i < 7; i++)
-            {
-                for (int j = 0; j < 11; j++)
-                {
-                    MapObject mapObject = new MapObject(111, 104);
-                    Grid.SetColumn(mapObject.GetImage(), j);
-                    Grid.SetRow(mapObject.GetImage(), i);
+            else
+                mapp = new string[7]
+           {
+                "0100010",
+                "0001000",
+                "1000001",
+                "0010100",
+                "1000001",
+                "0001000",
+                "010B010"
+           };
 
+            mapGrid.Width = mapp[0].Length * 102;
+            mapGrid.Height = mapp.Length * 102;
+            myWindow.Width = mapGrid.Width + 40;
+            myWindow.Height = mapGrid.Height + 81;
+            canvas.Width = mapGrid.Width ;
+            canvas.Height = mapGrid.Height;
+
+            for (int i = 0; i < mapp.Length; i++)
+            {
+                for (int j = 0; j < mapp[0].Length; j++)
+                {
+                    MapObject mapObject = new MapObject(102, 102);
+                    MapWarpPanel.Children.Add(mapObject.GetImage());
                     if (mapp[i][j] == '1')
                     {
                         mapObject.SetImage("1");
-                        mapObject.X = j * 110;
+                        mapObject.X = j * 102;
                         mapObject.Y = i * 102;
                         listMapObjects.Add(mapObject);
+                    }
+                    else if(mapp[i][j] == 'B')
+                    {
+                        Coordinat_Bot_Tank = new Point(j * 102 , i * 102  );
+                        mapObject.SetImage("0");
                     }
                     else
                     {
                         mapObject.SetImage("0");
                     }
 
-                    mapGrid.Children.Add(mapObject.GetImage());
-
                 }
             }
-            mapGrid.ShowGridLines = true;
         } // Отрисовка карты
         private void InitializanionTank()
         {
-            tank = new PlayerTank("1", 295, 5, "танк");
+            tank = new PlayerTank("1", 0, 0, "танк");
             windowTank.Add(tank);
-            if (colTank.Text == "1")
-                windowTank.Add(new BotTank("2", 225, 650, "EvilTank"));
-            else if (colTank.Text == "2")
-            {
-                windowTank.Add(new BotTank("2", 225, 650, "EvilTank"));
-                windowTank.Add(new BotTank("2", 485, 650, "EvilTank"));
-            }
-            else {
-                windowTank.Add(new BotTank("2", 225, 650, "EvilTank"));
-                windowTank.Add(new BotTank("2", 485, 650, "EvilTank"));
-                windowTank.Add(new BotTank("2", 665, 650, "EvilTank"));
-            }
+            windowTank.Add(new BotTank("2", (int)Coordinat_Bot_Tank.X, (int)Coordinat_Bot_Tank.Y, "EvilTank"));
         } // Добавление танков на карту
         private void InitializanionThread()
         {
@@ -130,6 +135,29 @@ namespace Tanks
             objectMappingBullet.Start();
             objectTankControl.Start();
         } // Запуск потоков
+        private void InitializationBotTank() {
+
+            if (colTank.Text == "1")
+                windowTank.Add(new BotTank("2", (int)Coordinat_Bot_Tank.X, (int)Coordinat_Bot_Tank.Y, "EvilTank"));
+            else if (colTank.Text == "2")
+            {
+                windowTank.Add(new BotTank("2", (int)Coordinat_Bot_Tank.X, (int)Coordinat_Bot_Tank.Y, "EvilTank"));
+                for (int i = 0; i < windowTank.Count; i++)
+                {
+                    if ((Math.Abs(windowTank[i].GetCoordinates.CordinateToX - (int)Coordinat_Bot_Tank.X) >= 58 || Math.Abs(windowTank[i].GetCoordinates.CordinateToY - (int)Coordinat_Bot_Tank.Y) >= 58))
+                        windowTank.Add(new BotTank("2", (int)Coordinat_Bot_Tank.X, (int)Coordinat_Bot_Tank.Y, "EvilTank"));
+
+                }
+                //windowTank.Add(new BotTank("2", (int)Coordinat_Bot_Tank.X, (int)Coordinat_Bot_Tank.Y, "EvilTank"));
+            }
+            else
+            {
+                windowTank.Add(new BotTank("2", (int)Coordinat_Bot_Tank.X, (int)Coordinat_Bot_Tank.Y, "EvilTank"));
+                windowTank.Add(new BotTank("2", (int)Coordinat_Bot_Tank.X, (int)Coordinat_Bot_Tank.Y, "EvilTank"));
+                windowTank.Add(new BotTank("2", (int)Coordinat_Bot_Tank.X, (int)Coordinat_Bot_Tank.Y, "EvilTank"));
+            }
+        }// ботов танков на карту
+
 
         void ThreadTankControl()
         {
@@ -141,7 +169,7 @@ namespace Tanks
                     for (int i = 1; i < windowTank.Count; i++)
                     {
                         СonditionTurnTheTank((BotTank)windowTank[i]);
-                        if (((BotTank)windowTank[i]).MoveShot || ! ((BotTank)windowTank[i]).IsRecgarge() )
+                        if (((BotTank)windowTank[i]).MoveShot || (windowTank[i].Clip == 0))
                             BotTankMove((BotTank)windowTank[i]);
                         ((BotTank)windowTank[i]).MoveShot = true;
                     }
@@ -149,22 +177,31 @@ namespace Tanks
                 catch { }
                 Thread.Sleep(50);
             }
-        }// Поток контроля вражеского
+        }// Поток контроля вражеского  танка
         void ThreadMapingTank()
         {
             while (true)
             {
+
+                Dispatcher.Invoke(() => PlayerTankInfo());
+
                 if (windowTank.Count == 1 || tank.Health == 0)
                     Dispatcher.Invoke(()=> GameOver());
-                
-                Thread.Sleep(17);
+                if (!tank.IsRecgarge())
+                {
+
+                    Dispatcher.Invoke(() => timeR.Text = "Время перезарядки : " + ((PlayerTank)tank).IsStopwatch());
+                }
+                else {
+                    Dispatcher.Invoke(() => timeR.Text = "");
+                }
+                Dispatcher.Invoke(() => time.Text = String.Format("{0}:{1}", Stopwatch.Elapsed.Minutes.ToString(), Stopwatch.Elapsed.Seconds.ToString()));
                 for (int i = 0; i < windowTank.Count; i++)
                 {
                     DateTime time = DateTime.Now;
                     try
                     {
                         Tank tk = windowTank[i];
-                        Dispatcher.Invoke(() => PlayerTankInfo());
                         Collision(windowTank[i]);
                     }
                     catch { }
@@ -172,10 +209,10 @@ namespace Tanks
                     {
                         Dispatcher.Invoke(() => canvas.Children.Remove(windowTank[i].GetImage()));
                         windowTank.Remove(windowTank[i]);
-                        Dispatcher.Invoke(() => Num.Text = (Convert.ToInt32(Num.Text) - 1).ToString());
                     }
                 }
 
+                Thread.Sleep(17);
             }
         }// Поток отрисовки танков
         void ThreadMapingBullet()
@@ -218,24 +255,25 @@ namespace Tanks
 
         private void BotTankMove(BotTank botTank)
         {
-            if (botTank.IsMove() && IsBeingOnTheMap(tank) && Dispatcher.Invoke(() => CheckListObjectMap(tank)))
+            int i = 1;
+            if (botTank.IsMove() && Dispatcher.Invoke(() => IsBeingOnTheMap(tank)) && Dispatcher.Invoke(() => CheckListObjectMap(tank)))
                 switch (botTank.OrientationMove)
                 {
                     case 1:
                         Dispatcher.Invoke(() => botTank.Move("Up"));
-                        Dispatcher.Invoke(() => botTank.passed += 5);
+                        Dispatcher.Invoke(() => botTank.passed += i);
                         break;
                     case 2:
                         Dispatcher.Invoke(() => botTank.Move("Down"));
-                        Dispatcher.Invoke(() => botTank.passed += 5);
+                        Dispatcher.Invoke(() => botTank.passed += i);
                         break;
                     case 3:
                         Dispatcher.Invoke(() => botTank.Move("Right"));
-                        Dispatcher.Invoke(() => botTank.passed += 5);
+                        Dispatcher.Invoke(() => botTank.passed += i);
                         break;
                     case 4:
                         Dispatcher.Invoke(() => botTank.Move("Left"));
-                        Dispatcher.Invoke(() => botTank.passed += 5);
+                        Dispatcher.Invoke(() => botTank.passed += i);
                         break;
                 }
             else
@@ -303,17 +341,16 @@ namespace Tanks
                 if (tnk != windowTank[j])
                 {
 
-                    if (IsThereACollision(tnk, windowTank[j]) && IsBeingOnTheMap(tnk) && Dispatcher.Invoke(() => CheckListObjectMap(tnk)))
+                    if (IsThereACollision(tnk, windowTank[j]) && Dispatcher.Invoke(() => IsBeingOnTheMap(tnk)) && Dispatcher.Invoke(() => CheckListObjectMap(tnk)))
                     {
                         PositionСhange(tnk);
                     }
                     else
                     {
-                        //Dispatcher.Invoke(() => CheckListObjectMap(tank));
                         if (tnk.GetType() == new BotTank().GetType())
                             ((BotTank)tnk).motionСancellation = true; 
                         tnk.CancellationMove();
-                        
+                       // Dispatcher.Invoke(() => tnk.Move(--tnk.Touch));
                     }
                 }
             }
@@ -325,6 +362,9 @@ namespace Tanks
             windowBullet.Remove(bullet);
         } // Удаление пули
 
+        private void MaxTouch(Tank tnk) {
+
+        }
         private bool IsThereACollision(Tank tankOne, Tank tankTwo)
         {
             if ((Math.Abs(tankOne.GetCoordinates.CordinateToX - tankTwo.GetCoordinates.CordinateToX) >= 58 || Math.Abs(tankOne.GetCoordinates.CordinateToY - tankTwo.GetCoordinates.CordinateToY) >= 58))
@@ -333,13 +373,14 @@ namespace Tanks
         } // Проверка на столкновение танков
         private bool IsBeingOnTheMap(Tank tank)
         {
-            if ((tank.GetCoordinates.CordinateToY >= 656 || tank.GetCoordinates.CordinateToY <= 0) || (tank.GetCoordinates.CordinateToX >= 1162 || tank.GetCoordinates.CordinateToX <= 0))
+
+            if ((tank.GetCoordinates.CordinateToY >= canvas.Height - 58 ||  tank.GetCoordinates.CordinateToY <= 0) || (tank.GetCoordinates.CordinateToX >= canvas.Width -58 || tank.GetCoordinates.CordinateToX <= 0))
                 return false;
             return true;
         } // Проверка танка на выход за границы карты
         private bool IsBeingOnTheMap(Bullet bullet)
         {
-            if ((bullet.GetCoordinates.CordinateToY > 704 || bullet.GetCoordinates.CordinateToY < 0) || (bullet.GetCoordinates.CordinateToX > 1144 || bullet.GetCoordinates.CordinateToX < 0))
+            if ((bullet.GetCoordinates.CordinateToY >= Dispatcher.Invoke(() => MapWarpPanel.Height) || bullet.GetCoordinates.CordinateToY < 0) || (bullet.GetCoordinates.CordinateToX >= Dispatcher.Invoke(() => MapWarpPanel.Width) || bullet.GetCoordinates.CordinateToX < 0))
                 return true;
             return false;
         } // Проверка пули на выход за границы карты
@@ -417,7 +458,6 @@ namespace Tanks
                     tank.Shot(ref windowBullet);
                     break;
             }
-            //tank.Turn();
         } // Отлавливание события нажатия на клавишу
         private void myWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -446,6 +486,8 @@ namespace Tanks
             {
                 mapGrid.Children.Remove(item.GetImage());
             }
+            myWindow.Width = 800;
+            myWindow.Height = 600;
             windowTank.Clear();
             windowBullet.Clear();
             listMapObjects.Clear();
@@ -467,20 +509,75 @@ namespace Tanks
             InitializanionMap();
             InitializanionTank();
             InitializanionThread();
+            myWindow.Top = 40;
+            myWindow.Left = 200;
             GAME = true;
             Stopwatch = new Stopwatch();
             Stopwatch.Start();
         }
 
+        XmlSerializer formatter = new XmlSerializer(typeof(List<string>));
+
         private void SaveTimeGame_Click(object sender, RoutedEventArgs e)
         {
+            List<string> ListTime = new List<string>();
 
+            using (var Sr = new  FileStream("timeGameList.xml", FileMode.OpenOrCreate))
+            {
+                try
+                {
+                    ListTime = (List<string>)formatter.Deserialize(Sr);
+                }
+                catch {
+                    using (var fs = new StreamWriter("timeGameList.xml"))
+                    {
+                        formatter.Serialize(fs, ListTime);
+                    }
+                }
+            }
+
+            ListTime.Add(TimeGame.Text);
+
+            using (var fs = new StreamWriter("timeGameList.xml"))
+            {
+                formatter.Serialize(fs, ListTime);
+            }
+
+            MenuPostGame.Visibility = Visibility.Collapsed;
+            StatisticGame.Visibility = Visibility.Collapsed;
+            menu.Visibility = Visibility.Visible;
         }
 
         private void OpenMenu_Click(object sender, RoutedEventArgs e)
         {
             MenuPostGame.Visibility = Visibility.Collapsed;
+            StatisticGame.Visibility = Visibility.Collapsed;
             menu.Visibility = Visibility.Visible;
+        }
+
+        private void Statistic_Click(object sender, RoutedEventArgs e)
+        {
+            menu.Visibility = Visibility.Collapsed;
+            StatisticGame.Visibility = Visibility.Visible;
+
+            List<string> ListTime = new List<string>();
+
+            using (var Sr = new FileStream("timeGameList.xml", FileMode.OpenOrCreate))
+            {
+                try
+                {
+                    ListTime = (List<string>)formatter.Deserialize(Sr);
+                }
+                catch
+                {
+                    using (var fs = new StreamWriter("timeGameList.xml"))
+                    {
+                        formatter.Serialize(fs, ListTime);
+                    }
+                }
+            }
+            ListTime.Sort();
+            ListGame.ItemsSource = ListTime;
         }
     }
 }

@@ -44,15 +44,15 @@ namespace Tanks
         {
             Image = new Image();
             
-            //Image.Width = width;
-            //Image.Height = height;
+            Image.Width = width;
+            Image.Height = height;
         }
         public MapObject() { }
         public bool IsCheckRange(Tank tankOne, Tank tankTwo, bool isCheck)
         {
             if (isCheck)
             {
-                if (tankTwo.GetCoordinates.CordinateToX + 29 >= X && tankOne.GetCoordinates.CordinateToX + 29 <= (X + 110))
+                if (tankTwo.GetCoordinates.CordinateToX + 29 >= X && tankOne.GetCoordinates.CordinateToX + 29 <= (X + 102))
                     if (tankOne.GetCoordinates.CordinateToY < Y && Y < tankTwo.GetCoordinates.CordinateToY)
                         return false;
                     else if (tankOne.GetCoordinates.CordinateToY > Y && Y > tankTwo.GetCoordinates.CordinateToY)
@@ -68,13 +68,31 @@ namespace Tanks
             }
             return true;
         }
+        public bool IsCheckMove(int objectX, int objectY, double n, Tank tank)
+        {
+            if (Math.Abs((objectX + n) - (X + 55)) >= (55 + n) ||
+                Math.Abs((objectY + n) - (Y + 51)) >= (51 + n))
+            {
+                if (Math.Abs((objectX + n) - (X + 51)) >= (51 + n))
+                {
+                    tank.Touch = Convert.ToInt32(Math.Abs((objectX + n) - (X + 51)) - (51 + n));
+                }
+                if (Math.Abs((objectY + n) - (Y + 51)) >= (51 + n))
+                {
+                    tank.Touch = Convert.ToInt32(Math.Abs((objectY + n) - (Y + 51)) - (51 + n));
+                }
+                return true;
+            }
+            return false;
+        }// Тестовый вариант !!! НОВОЕ
         public bool IsCheckMove(int objectX, int objectY, double n)
         {
-            if (Math.Abs((objectX + n) - (X + 55 )) >= (55 + n) ||
-                Math.Abs((objectY + n) - (Y + 51 )) >= (51 + n))
+            if (Math.Abs((objectX + n) - (X + 55)) >= (55 + n) ||
+                Math.Abs((objectY + n) - (Y + 51)) >= (51 + n))
                 return true;
             return false;
         }
+
         public void SetImage(string type)
         {
             if (type == "0")

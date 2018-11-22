@@ -15,12 +15,15 @@ namespace Tanks
         private string _name;
         private int _health;
         private int _clip;
+        private int _touch;
         private int _previousPositionX;
         private int _previousPositionY;
 
         public DateTime RecgargeShot;
         protected Coordinates coordinatesTank;
 
+
+        public int Touch { get => _touch; set => _touch = value; }
         public int Clip
         {
             get
@@ -92,7 +95,7 @@ namespace Tanks
 
         public Tank(string name, int x, int y, string tankOr)
         {
-            coordinatesTank = new Coordinates(x, y);
+            coordinatesTank = new Coordinates(x +22, y+22);
             Health = 4;
             Clip = 3;
             PreviousPositionToX = coordinatesTank.CordinateToX;
@@ -103,7 +106,7 @@ namespace Tanks
         public Tank() { }
         public void Damage()
         {
-            Health--;
+            //Health--;
         }// молучение урона
         public void Drawing(string tankOr)
         {
@@ -134,21 +137,48 @@ namespace Tanks
             PreviousPositionToX = coordinatesTank.CordinateToX;
             PreviousPositionToY = coordinatesTank.CordinateToY;
             Turn(Orient);
+            int i = 8;
             switch (Orient) {
                 case "Up":
-                    coordinatesTank.CordinateToY -= 5;
+                    coordinatesTank.CordinateToY -= i;
                     break;
                 case "Down":
-                    coordinatesTank.CordinateToY += 5;
+                    coordinatesTank.CordinateToY += i;
                     break;
                 case "Right":
-                    coordinatesTank.CordinateToX += 5;
+                    coordinatesTank.CordinateToX += i;
                     break;
                 case "Left":
-                    coordinatesTank.CordinateToX -= 5;
+                    coordinatesTank.CordinateToX -= i;
                     break;
             }
-        } // Изменение кординат танка и имейджа
+        } // Изменениеи имейджа и кординат танка
+        public void Move(int i)
+        {
+            PreviousPositionToY = coordinatesTank.CordinateToY;
+            PreviousPositionToX = coordinatesTank.CordinateToX;
+
+            Turn(Orient);
+            switch (Orient)
+            {
+                case "Up":
+                    coordinatesTank.CordinateToY -= i;
+                    //PreviousPositionToY = i;
+                    break;
+                case "Down":
+                    coordinatesTank.CordinateToY += i;
+                   // PreviousPositionToY = -i;
+                    break;
+                case "Right":
+                    coordinatesTank.CordinateToX += i;
+                   // PreviousPositionToX = -i;
+                    break;
+                case "Left":
+                    coordinatesTank.CordinateToX -= i;
+                   // PreviousPositionToX = i;
+                    break;
+            }
+        } // Тестовый вариант !!! НОВОЕ
         public virtual void Shot(ref List<Bullet> windowBullet) {} // Выстрел танка
         public bool IsRecgarge()
         {

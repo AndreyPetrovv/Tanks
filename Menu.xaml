@@ -8,9 +8,8 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Menu">
 
-    <Grid Name="MenuPostGame">
-        <Button x:Name="SaveTimeGame" Content="Save Time Game" HorizontalAlignment="Left" Margin="50,345,0,0" VerticalAlignment="Top" Width="330" Height="70" FontSize="36" Background="White" FontFamily="Showcard Gothic"/>
-        <Button x:Name="OpenMenu" Content="Open Menu" HorizontalAlignment="Left" Margin="435,345,0,0" VerticalAlignment="Top" Width="330" Height="70" FontSize="36" Background="White" FontFamily="Showcard Gothic"/>
-        <TextBlock HorizontalAlignment="Left" Margin="180,95,0,0" TextWrapping="Wrap" Text="Time" VerticalAlignment="Top" Height="120" Width="430" FontSize="36" TextAlignment="Center" LineHeight="16"/>
+    <Grid Name="StatisticGame">
+        <Button x:Name="OpenMenu" Content="Open Menu" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="230" Height="50" FontSize="36" Background="White" FontFamily="Showcard Gothic" Margin="285,0,285,9.6"/>
+        <ListBox x:Name="ListGame" HorizontalAlignment="Center" Height="340"  VerticalAlignment="Top" Width="460" Margin="170,25,170,0"/>
     </Grid>
 </Page>

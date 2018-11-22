@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
+using System.Diagnostics;
+
 namespace Tanks
 {
     public class PlayerTank : Tank
     {
-
+        private Stopwatch StopwatchRecrage = new Stopwatch();
         public PlayerTank(string name, int x, int y, string tankOr) : base(name, x, y, tankOr) { }
         public override void Shot(ref List<Bullet> windowBullet)
         {
@@ -14,7 +16,12 @@ namespace Tanks
                 RecgargeShot = DateTime.Now;
                 windowBullet.Add(new Bullet(this.GetCoordinates.CordinateToX, this.GetCoordinates.CordinateToY, Orient));
                 Clip--;
+                StopwatchRecrage.Reset();
             }
+            if (Clip == 0) {
+                StopwatchRecrage.Start();
+            }
+            
         }
         public override void Turn(string orient)
         {
@@ -43,34 +50,41 @@ namespace Tanks
         }
         public override void Move(string Orient)
         {
-            PreviousPositionToY = 0;
-            PreviousPositionToX = 0;
 
+            PreviousPositionToY = coordinatesTank.CordinateToY;
+            PreviousPositionToX = coordinatesTank.CordinateToX;
+            int i = 4;
             Turn(Orient);
             switch (Orient)
             {
                 case "Up":
-                    coordinatesTank.CordinateToY -= 5;
-                    PreviousPositionToY = 5;
+                    coordinatesTank.CordinateToY -= i;
+                    //PreviousPositionToY = i;
                     break;
                 case "Down":
-                    coordinatesTank.CordinateToY += 5;
-                    PreviousPositionToY = -5;
+                    coordinatesTank.CordinateToY += i;
+                    // PreviousPositionToY = -i;
                     break;
                 case "Right":
-                    coordinatesTank.CordinateToX += 5;
-                    PreviousPositionToX = -5;
+                    coordinatesTank.CordinateToX += i;
+                    // PreviousPositionToX = -i;
                     break;
                 case "Left":
-                    coordinatesTank.CordinateToX -= 5;
-                    PreviousPositionToX = 5;
+                    coordinatesTank.CordinateToX -= i;
+                    // PreviousPositionToX = i;
                     break;
             }
         }
+
+        public string IsStopwatch() {
+
+            return (10 - StopwatchRecrage.Elapsed.Seconds).ToString() ;
+        }
+      
         public override void CancellationMove()
         {
-            coordinatesTank.CordinateToX += PreviousPositionToX;
-            coordinatesTank.CordinateToY += PreviousPositionToY;
+            coordinatesTank.CordinateToX = PreviousPositionToX;
+            coordinatesTank.CordinateToY = PreviousPositionToY;
         }
     }
 }

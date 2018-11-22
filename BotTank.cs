@@ -70,7 +70,7 @@ namespace Tanks
             return false;
         }
         public bool IsMove() {
-            if (passed >= 110 || motionСancellation)
+            if (passed >= 51 || motionСancellation)
                 return false;
             return true;
         }
